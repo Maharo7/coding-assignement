@@ -1,0 +1,15 @@
+.p-tabmenu-nav .p-tabmenuitem.p-state-active {
+    background-color: #d90096 !important; 
+    border: 1px solid #d600d9 !important;
+}
+
+.card {
+    background-color:#3f51b5;
+    width: auto;
+    height: 15vh;
+}
+
+.title-app{
+    color: white;
+    font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif
+}

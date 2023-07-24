@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@angular/animations": "^16.1.6",
     "@angular/common": "16.1.6",
     "@angular/compiler": "16.1.6",
     "@angular/core": "16.1.6",
@@ -12,6 +13,7 @@
     "@angular/router": "16.1.6",
     "core-js": "2.6.2",
     "primeicons": "^6.0.1",
+    "primeng": "^15.4.6-lts",
     "primeng-lts": "^12.2.5",
     "rxjs": "6.6.3",
     "tslib": "^2.0.0",
