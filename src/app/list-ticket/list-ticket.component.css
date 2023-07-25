@@ -1,0 +1,29 @@
+.ticket-add-field {
+    margin-top: 4vh;
+}
+.add-button-ticket {
+    /* margin-left: 70vw; */
+    display: grid;
+    /* width: 20vw; */
+}
+.search-text {
+    margin-top: 1.3rem;
+    margin-bottom: 1rem;
+    width: 97vw;
+}
+.search-icon {
+    height: fit-content;
+    margin: auto;
+}
+.ticket-list-field {
+    margin-top: 2vh;
+}
+.p-progress-spinner-circle {
+    stroke: #000 !important;
+}
+.fieldset-ticket {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    /* margin-bottom: 1.5rem; */
+}

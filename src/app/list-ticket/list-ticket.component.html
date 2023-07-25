@@ -1,8 +1,49 @@
-<div class="card flex justify-content-center">
-    <p-fieldset legend="Header">
-        <p class="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+<div class="ticket-add-field">
+    <p-fieldset legend="Add tickets" [toggleable]="true">
+        <div class="fieldset-ticket">
+            <div class="flex flex-column gap-2 add-ticket">
+                <label htmlFor="username">Description</label>
+                <input pInputText id="username" aria-describedby="username-help" />
+            </div>
+            <div>
+                <p-button class="add-button-ticket" label="Add ticket" ></p-button>
+            </div>
+        </div>
     </p-fieldset>
+</div>
+<div class="ticket-list-field">
+    <div class="card flex justify-content-center">
+        <div class="card flex flex-wrap justify-content-center gap-3">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search search-icon"></i>
+                <input pInputText type="text" class="p-inputtext search-text" (input)="applyGlobalFilter($event.target.value)"  placeholder="Search ticket" />
+            </span>
+        </div>
+        <p-card header="">
+            <div class="card" *ngIf="isLoaded">
+                <p-table #ticketTable [value]="tickets" [globalFilterFields]="['description', 'assigneeId', 'completed']">
+                    <ng-template pTemplate="header" let-tickets>
+                        <tr>
+                            <th>Description</th>
+                            <th>Assigned to</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-ticket>
+                        <!-- Use the `ticket` variable to access properties of each ticket -->
+                        <tr>
+                            <td>{{ ticket.description }}</td>
+                            <td>{{ ticket.assigneeId }}</td>
+                            <td>{{ ticket.completed }}</td>
+                            <td>i</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="card" *ngIf="!isLoaded">
+                <p-progressSpinner class="p-progress-spinner-circle" styleClass="w-4rem h-4rem" strokeWidth="2" fill="var(--surface-ground)" animationDuration="1.5s"></p-progressSpinner>
+            </div>
+        </p-card>
+    </div>
 </div>

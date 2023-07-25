@@ -7,10 +7,18 @@ import {ButtonModule} from 'primeng/button';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ListTicketComponent } from './list-ticket/list-ticket.component';
 import { FieldsetModule } from 'primeng/fieldset';
+import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
     declarations: [AppComponent, HeaderComponent, ListTicketComponent],
-    imports: [BrowserModule,ButtonModule,TabMenuModule,FieldsetModule],
+    imports: [BrowserModule, ButtonModule, TabMenuModule, FieldsetModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, CardModule, TableModule,
+        ProgressSpinnerModule, InputTextModule],
     providers: [BackendService],
     bootstrap: [AppComponent]
 })
