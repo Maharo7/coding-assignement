@@ -1,14 +1,23 @@
 <div class="ticket-add-field">
     <p-fieldset legend="Add tickets" [toggleable]="true">
-        <div class="fieldset-ticket">
+        <form class="fieldset-ticket" (ngSubmit)="onSubmit(form)" #form="ngForm">
             <div class="flex flex-column gap-2 add-ticket">
-                <label htmlFor="username">Description</label>
-                <input pInputText id="username" aria-describedby="username-help" />
+                <label htmlFor="description">Description</label>
+                <input pInputText name="description" [(ngModel)]="descriptionToAdd" #description="ngModel" required minlength="4" />
+                <div *ngIf="description.invalid && (description.dirty || description.touched)">
+                    <div *ngIf="description.errors?.['required']">
+                        Description required
+                    </div>
+                    <div *ngIf="description.errors?.['minlength']">
+                        Description must have at least 4 characters
+                    </div>
+                </div>
             </div>
             <div>
-                <p-button class="add-button-ticket" label="Add ticket" ></p-button>
+                <p-button class="add-button-ticket" [disabled]="!form.valid" label="Add ticket" type="submit"></p-button>
             </div>
-        </div>
+        </form>
+        <p-toast></p-toast>
     </p-fieldset>
 </div>
 <div class="ticket-list-field">
@@ -31,12 +40,11 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-ticket>
-                        <!-- Use the `ticket` variable to access properties of each ticket -->
                         <tr>
                             <td>{{ ticket.description }}</td>
-                            <td>{{ ticket.assigneeId }}</td>
+                             <td>{{ getUserName(ticket.assigneeId) }}</td>
                             <td>{{ ticket.completed }}</td>
-                            <td>i</td>
+                            <td><p-button icon="pi pi-info-circle" styleClass="p-button-info"></p-button></td>
                         </tr>
                     </ng-template>
                 </p-table>

@@ -14,12 +14,14 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
+import { UtilsService } from './utils.service';
 
 @NgModule({
     declarations: [AppComponent, HeaderComponent, ListTicketComponent],
     imports: [BrowserModule, ButtonModule, TabMenuModule, FieldsetModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, CardModule, TableModule,
-        ProgressSpinnerModule, InputTextModule],
-    providers: [BackendService],
+        ProgressSpinnerModule, InputTextModule, ToastModule],
+    providers: [BackendService, UtilsService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
