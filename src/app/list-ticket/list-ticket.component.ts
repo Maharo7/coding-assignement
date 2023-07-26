@@ -21,7 +21,7 @@ export class ListTicketComponent implements OnInit{
   ticketsUser: TicketUser[];
   users: User[];
   searchValue: string | undefined;
-  isLoaded : boolean = false;
+  isLoaded : boolean;
   descriptionToAdd : string;
 
   statut: string[] | undefined;
@@ -33,15 +33,14 @@ export class ListTicketComponent implements OnInit{
   ngOnInit() {
     this.statut=["true" , "false"];
     this.getAllTickets();
-    this.getAllUsers();
   }
 
   getAllTickets() {
+    this.isLoaded = false;
     this.backendService.tickets()
       .subscribe((tickets) => {
         if (tickets) {
           const ticketObservables = tickets.map(ticket => this.getTicketUser(ticket));
-          
           forkJoin(ticketObservables).subscribe((ticketUsers: TicketUser[]) => {
             this.ticketsUser = ticketUsers;
             this.isLoaded = true;
@@ -61,25 +60,12 @@ export class ListTicketComponent implements OnInit{
     );
   }
 
-  getAllUsers() {
-    this.backendService.users().subscribe((users) => {
-      if (users) {
-        this.users = users;
-      }
-    });
-  }
-
-  getUserName(assigneeId: number): string {
-    const user = this.users.find((user) => user.id === assigneeId);
-    return user ? user.name : '';
-  }
 
   onSubmit(form: NgForm) {
-    this.isLoaded = false;
     const newTicketPayload = { description: this.descriptionToAdd };
     this.backendService.newTicket(newTicketPayload).subscribe((ticket) => {
       if(ticket) {
-        this.isLoaded = true;
+        this.getAllTickets();
         console.log("New Ticket Created:", ticket);
         this.utilsService.showToastSuccess("New ticket "+ticket.description+ " created");
       }

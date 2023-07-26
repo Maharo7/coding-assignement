@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BackendService } from './backend.service';
 import { HeaderComponent } from './header/header.component';
-import {ButtonModule} from 'primeng/button';
+import {ButtonModule} from 'primeng-lts/button';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ListTicketComponent } from './list-ticket/list-ticket.component';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -17,12 +17,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { UtilsService } from './utils.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { DetailTicketComponent } from './detail-ticket/detail-ticket.component';
+import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng-lts/api';
 
 @NgModule({
-    declarations: [AppComponent, HeaderComponent, ListTicketComponent],
+    declarations: [AppComponent, HeaderComponent, ListTicketComponent, DetailTicketComponent],
     imports: [BrowserModule, ButtonModule, TabMenuModule, FieldsetModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, CardModule, TableModule,
-        ProgressSpinnerModule, InputTextModule, ToastModule, DropdownModule],
-    providers: [BackendService, UtilsService],
+        ProgressSpinnerModule, InputTextModule, ToastModule, DropdownModule, TagModule],
+    providers: [BackendService, UtilsService ,MessageService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

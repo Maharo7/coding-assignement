@@ -29,7 +29,7 @@ export class BackendService {
             description: 'Move the desk to the new location'
         },
         {
-            id: 3,
+            id: 2,
             completed: true,
             assigneeId: 112,
             description: 'Take out the trash'
@@ -38,7 +38,7 @@ export class BackendService {
 
     public storedUsers: User[] = [{ id: 111, name: 'Victor' }, { id: 112, name: 'Alex' }];
 
-    private lastId: number = 1;
+    private lastId: number = 2;
 
     private findUserById = id => this.storedUsers.find((user: User) => user.id === +id);
     private findTicketById = id => this.storedTickets.find((ticket: Ticket) => ticket.id === +id);
