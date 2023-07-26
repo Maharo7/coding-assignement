@@ -6,6 +6,9 @@ import { NgForm } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { User } from 'src/interfaces/user.interface';
 import { UtilsService } from '../utils.service';
+import { TicketUser } from 'src/interfaces/ticket-User.interface';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-ticket',
@@ -15,33 +18,47 @@ import { UtilsService } from '../utils.service';
 })
 export class ListTicketComponent implements OnInit{
   tickets: Ticket[];
+  ticketsUser: TicketUser[];
   users: User[];
   searchValue: string | undefined;
   isLoaded : boolean = false;
   descriptionToAdd : string;
 
+  statut: string[] | undefined;
+  selectedStatut: string | undefined;
+
   constructor(private backendService :BackendService, private utilsService: UtilsService){
   }
 
-  @ViewChild('ticketTable') ticketTable: Table;
-
-  applyGlobalFilter(value: string) {
-    this.ticketTable.filterGlobal(value, 'contains');
-  }
-
   ngOnInit() {
+    this.statut=["true" , "false"];
     this.getAllTickets();
     this.getAllUsers();
   }
 
   getAllTickets() {
     this.backendService.tickets()
-    .subscribe((ticket) => {
-      if(ticket) {
-        this.tickets = ticket;
-        this.isLoaded = true;
-      }
-    })
+      .subscribe((tickets) => {
+        if (tickets) {
+          const ticketObservables = tickets.map(ticket => this.getTicketUser(ticket));
+          
+          forkJoin(ticketObservables).subscribe((ticketUsers: TicketUser[]) => {
+            this.ticketsUser = ticketUsers;
+            this.isLoaded = true;
+          });
+        }
+      });
+  }
+
+  getTicketUser(ticket: Ticket): Observable<TicketUser> {
+    return this.backendService.user(ticket.assigneeId).pipe(
+      map(user => ({
+        id: ticket.id,
+        completed: ticket.completed,
+        description: ticket.description,
+        user: user
+      }))
+    );
   }
 
   getAllUsers() {
@@ -68,4 +85,10 @@ export class ListTicketComponent implements OnInit{
       }
     });
   }
+
+  @ViewChild('ticketTable') ticketTable: Table;
+  applyGlobalFilter(value: string) {
+    this.ticketTable.filterGlobal(value, 'contains');
+  }
+
 }

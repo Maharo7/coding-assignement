@@ -16,11 +16,12 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { UtilsService } from './utils.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
     declarations: [AppComponent, HeaderComponent, ListTicketComponent],
     imports: [BrowserModule, ButtonModule, TabMenuModule, FieldsetModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, CardModule, TableModule,
-        ProgressSpinnerModule, InputTextModule, ToastModule],
+        ProgressSpinnerModule, InputTextModule, ToastModule, DropdownModule],
     providers: [BackendService, UtilsService],
     bootstrap: [AppComponent]
 })
