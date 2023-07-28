@@ -1,32 +1,41 @@
+<p-toast></p-toast>
 <div class="ticket-add-field">
     <p-fieldset legend="Add tickets" [toggleable]="true">
         <form class="fieldset-ticket" (ngSubmit)="onSubmit(form)" #form="ngForm">
             <div class="flex flex-column gap-2 add-ticket">
-                <label htmlFor="description">Description</label>
-                <input pInputText name="description" [(ngModel)]="descriptionToAdd" #description="ngModel" required minlength="4" />
+                <label htmlFor="description">Ticket description</label>
+                <!-- <input pInputText name="description" [(ngModel)]="descriptionToAdd" #description="ngModel" required minlength="4" class="add-ticket-input"/> -->
+                <div class="card flex textarea-description">
+                    <textarea rows="1.5" name="description" cols="40" pInputTextarea [(ngModel)]="descriptionToAdd" #description="ngModel" required minlength="4"></textarea>
+                </div>
                 <div *ngIf="description.invalid && (description.dirty || description.touched)">
-                    <div *ngIf="description.errors?.['required']">
+                    <div class = "error-message-input" *ngIf="description.errors?.['required']">
                         Description required
                     </div>
-                    <div *ngIf="description.errors?.['minlength']">
+                    <div class = "error-message-input" *ngIf="description.errors?.['minlength']">
                         Description must have at least 4 characters
                     </div>
                 </div>
             </div>
-            <div>
-                <p-button class="add-button-ticket" [disabled]="!form.valid" label="Add ticket" type="submit"></p-button>
+            <div class="button-add-ticket">
+                <p-button class="add-button-ticket" [disabled]="!form.valid" label="Add ticket" type="submit"  [loading]="isAdding"></p-button>
             </div>
         </form>
-        <p-toast></p-toast>
     </p-fieldset>
 </div>
 <div class="ticket-list-field">
     <div class="card flex justify-content-center">
-        <div class="card flex flex-wrap justify-content-center gap-3">
-            <span class="p-input-icon-left">
+        <h3 class="label-list">Ticket list</h3>
+        <div *ngIf="isLoaded" class="card flex flex-wrap keyword-field">
+            <span class="p-input-icon-left p-float-label">
+                <i class="pi pi-search"></i>
+                <input type="text" pInputText id="keyword" class="keyword" (input)="applyGlobalFilter($event.target.value)" />
+                <label style="font-family: Roboto;" htmlFor="keyword">search keyword</label>
+            </span>
+            <!-- <span class="p-input-icon-left">
                 <i class="pi pi-search search-icon"></i>
                 <input pInputText type="text" class="p-inputtext search-text" (input)="applyGlobalFilter($event.target.value)" placeholder="Search keyword" />
-            </span>
+            </span> -->
         </div>
         <p-card header="">
             <div class="card" *ngIf="isLoaded">
@@ -42,37 +51,62 @@
                           />
                         </th>
                         <th>
-                          <input
-                            type="text"
-                            pInputText
-                            (input)="ticketTable.filter($event.target.value, 'user.name', 'contains')"
-                            placeholder="Search Assigned To"
-                          />
+                          <p-dropdown [options]="users" [(ngModel)]="selectedUser" optionLabel="name" [filter]="true" filterBy="name" 
+                          [showClear]="true" placeholder="Select an user" (onChange)="applyUserFilter()">
+                            <ng-template pTemplate="selectedUser">
+                                <div class="flex align-items-center gap-2" *ngIf="selectedUser">
+                                    <div>{{ selectedUser?.name }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-userlist pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ userlist?.name }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
                         </th>
                         <th>
-                          <!-- <input
-                            type="text"
-                            pInputText
-                            (input)="ticketTable.filter($event.target.value, 'completed', 'contains')"
-                            placeholder="Search Status"
-                          /> -->
-                          <p-dropdown [options]="statut" [(ngModel)]="selectedStatut" (onChange)="ticketTable.filter(selectedStatut, 'completed', 'contains')" [editable]="true" placeholder="search if completed"></p-dropdown>
+                          <p-dropdown [options]="statut" [(ngModel)]="selectedStatut" optionLabel="status" [filter]="true" filterBy="status" 
+                          [showClear]="true" placeholder="Select a status" (onChange)="applyStatusFilter()">
+                            <ng-template pTemplate="selectedStatut">
+                                <div class="flex align-items-center gap-2" *ngIf="selectedStatut">
+                                    <div>{{ selectedStatut?.status }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-statusList pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ statusList?.status }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                          <!-- <p-dropdown [options]="statut" [(ngModel)]="selectedStatut" (onChange)="ticketTable.filter(selectedStatut, 'completed', 'contains')" [editable]="true" placeholder="search if completed"></p-dropdown> -->
                         </th>
+                        <th></th>
+                      </tr>
+                      <tr>
+                        <th>Description</th>
+                        <th>Assigned to</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-ticket>
                       <tr>
-                        <td>{{ ticket.description }}</td>
-                        <td>{{ ticket.user != null ? ticket.user.name : null }}</td>
-                        <td>{{ ticket.completed }}</td>
-                        <td><p-button icon="pi pi-info-circle" routerLink="/detail-ticket/{{ ticket.id }}"></p-button></td>
+                        <td>{{ ticket?.description }}</td>
+                        <td>{{ ticket?.user?.name }}</td>
+                        <td>{{ ticket?.completed }}</td>
+                        <td><p-button icon="pi pi-info-circle" routerLink="/detail-ticket/{{ ticket?.id }}"></p-button></td>
                       </tr>
                     </ng-template>
-                  </p-table>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="5">No ticket found.</td>
+                        </tr>
+                    </ng-template>
+              </p-table>
                   
             </div>
-            <div class="card" *ngIf="!isLoaded">
+            <div class="card loader-spin" *ngIf="!isLoaded">
                 <p-progressSpinner class="p-progress-spinner-circle" styleClass="w-4rem h-4rem" strokeWidth="2" fill="var(--surface-ground)" animationDuration="1.5s"></p-progressSpinner>
             </div>
         </p-card>

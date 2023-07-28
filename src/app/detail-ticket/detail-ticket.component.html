@@ -1,5 +1,5 @@
 <div class="card flex justify-content-center">
-    <div class="card" *ngIf="!isLoaded">
+    <div class="card loader-spin" *ngIf="!isLoaded">
         <p-progressSpinner class="p-progress-spinner-circle" styleClass="w-4rem h-4rem" strokeWidth="2" fill="var(--surface-ground)" animationDuration="1.5s"></p-progressSpinner>
     </div>
     <div *ngIf="isLoaded">
@@ -8,9 +8,9 @@
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
             </ng-template>
             <div>
-                <p>
-                     {{ user ? 'Assigned to : ' +user.name : 'This ticket is unassigned, Assign to : '}}
-                    <p-dropdown *ngIf="user == null" [options]="usersToSelect" [(ngModel)]="selectedUser" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select an user">
+                <p> {{ user ? 'Assigned to : ' +user.name : 'This ticket is unassigned'}} </p>
+                    <p-dropdown *ngIf="user == null" [options]="usersToSelect" [(ngModel)]="selectedUser" optionLabel="name" [filter]="true"
+                     filterBy="name" [showClear]="true" placeholder="Select an user to assign">
                         <ng-template pTemplate="selectedUser">
                             <div class="flex align-items-center gap-2" *ngIf="selectedUser">
                                 <div>{{ selectedUser.name }}</div>
@@ -22,8 +22,8 @@
                             </div>
                         </ng-template>
                     </p-dropdown>
-                    <p-button *ngIf="user == null" label="Submit" [loading]="isAssignLoaded" (onClick)="assignTicket()" ></p-button>
-                </p>
+                    <p-button *ngIf="user == null" label="Assign" [loading]="isAssignLoaded" (onClick)="assignTicket()" [disabled]="!selectedUser" class="assign-button"></p-button>
+                
             </div>
             
             <p>
@@ -31,7 +31,7 @@
                 <p-tag [value]="ticket.completed ? 'Completed' : 'To do'" [severity]="getSeverity(ticket.completed)"></p-tag>
             </p>
             <ng-template pTemplate="footer">
-                <p-button label="Complete" icon="pi pi-check" [disabled]="ticket.completed || user == null" styleClass="p-button-success" (onClick)="completeTicket()"></p-button>
+                <p-button label="Complete" icon="pi pi-check" [disabled]="ticket.completed || user == null" styleClass="p-button-success" (onClick)="completeTicket()" [loading]="isCompleteLoaded"></p-button>
                 <p-button label="Back" icon="pi pi-replay" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }" routerLink="/list-ticket"></p-button>
             </ng-template>
         </p-card>

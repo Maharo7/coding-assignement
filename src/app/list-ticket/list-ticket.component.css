@@ -1,6 +1,17 @@
 .ticket-add-field {
     margin-top: 4vh;
 }
+.add-ticket {
+    display: grid;
+}
+.add-ticket-input {
+    margin-top: 15px;
+    margin-right: 15px;
+}
+.error-message-input {
+    font-size: 1.2vh;
+    color: palevioletred;
+}
 .add-button-ticket {
     /* margin-left: 70vw; */
     display: grid;
@@ -22,8 +33,27 @@
     stroke: #000 !important;
 }
 .fieldset-ticket {
-    display: flex;
+    display: grid;
     /* justify-content: center; */
     align-items: center;
     /* margin-bottom: 1.5rem; */
+}
+.button-add-ticket {
+    width: fit-content;
+}
+.textarea-description {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.label-list {
+    font-family: Roboto;
+    margin-left: 15px;
+}
+#keyword {
+    width: 40vw;
+}
+.keyword-field {
+    float: right;
+    margin-bottom: 1.5rem;
+    margin-right: 1rem;
 }

@@ -1,7 +1,21 @@
 <header>
-    <div class="card">
-        <h2 class="title-app">Ticket Managing App</h2>
-        <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
-    </div>
-</header>
-
+    <nav class="p-navbar">
+      <div class="p-navbar-brand">
+        <span>Ticket Managing Application</span>
+      </div>
+      <div class="p-navbar-container">
+        <div class="p-navbar-menu">
+          <ul>
+            <li><a routerLink="/list-ticket" routerLinkActive="active">Tickets</a></li>
+            <li><a routerLink="/settings" routerLinkActive="active">Settings</a></li>
+          </ul>
+        </div>
+        <div class="p-navbar-icons">
+          <a href="#" class="p-disconnect-icon">
+            <i class="pi pi-power-off"></i>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  

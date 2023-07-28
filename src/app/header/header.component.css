@@ -1,15 +1,73 @@
-.p-tabmenu-nav .p-tabmenuitem.p-state-active {
-    background-color: #d90096 !important; 
-    border: 1px solid #d600d9 !important;
-}
-
-.card {
-    background-color:#3f51b5;
-    width: auto;
-    height: 15vh;
-}
-
-.title-app{
-    color: white;
-    font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif
-}
+header {
+    background-color: #3F51B5;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  .p-navbar {
+    height: 7vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  }
+  
+  .p-navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .p-navbar-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .p-navbar-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .p-navbar-menu li {
+    margin-right: 20px;
+  }
+  
+  .p-navbar-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  
+  .p-navbar-menu a.active {
+    color: #c2c2c2;
+  }
+  
+  .p-navbar-icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .p-disconnect-icon {
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    margin-left: 20px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .p-navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .p-navbar-menu ul {
+      flex-direction: column;
+    }
+  
+    .p-navbar-menu li {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
+  

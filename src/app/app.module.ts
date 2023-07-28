@@ -20,11 +20,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DetailTicketComponent } from './detail-ticket/detail-ticket.component';
 import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng-lts/api';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
-    declarations: [AppComponent, HeaderComponent, ListTicketComponent, DetailTicketComponent],
+    declarations: [AppComponent, HeaderComponent, ListTicketComponent, DetailTicketComponent, PageNotFoundComponent],
     imports: [BrowserModule, ButtonModule, TabMenuModule, FieldsetModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, CardModule, TableModule,
-        ProgressSpinnerModule, InputTextModule, ToastModule, DropdownModule, TagModule],
+        ProgressSpinnerModule, InputTextModule, ToastModule, DropdownModule, TagModule, InputTextareaModule],
     providers: [BackendService, UtilsService ,MessageService],
     bootstrap: [AppComponent]
 })

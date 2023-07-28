@@ -2,3 +2,9 @@
 @import '../node_modules/primeicons/primeicons.css';
 @import '../node_modules/primeng-lts/resources/primeng.min.css';
 @import '../node_modules/primeng-lts/resources/themes/mdc-light-indigo/theme.css';
+
+.loader-spin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
