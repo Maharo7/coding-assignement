@@ -17,9 +17,11 @@ import { BackendService } from '../backend.service';
   styleUrls: ['./list-ticket.component.css']
 })
 export class ListTicketComponent implements OnInit{
+  
   tickets: Ticket[];
+  ticketsTest: Ticket[] = [];
   ticketsUser: TicketUser[];
-  users: User[];
+  users: User[] = [];
   selectedUser: User;
   searchValue: string | undefined;
   isLoaded: boolean;
@@ -52,8 +54,8 @@ export class ListTicketComponent implements OnInit{
             catchError((error) => {
               this.utilsService.showToastError('There is an error in retrieving the tickets' , 1000);
               console.error('forkJoin: ', error);
-              // this.isLoaded = true; // Set isLoaded to true to stop the loader
-              return throwError(error); // Propagate the error to the outer observable
+              // this.isLoaded = true;
+              return throwError(error); 
             })
           ).subscribe((ticketUsers: TicketUser[]) => {
             const ticketsUserNotNull = []
@@ -63,7 +65,7 @@ export class ListTicketComponent implements OnInit{
               }
             })
             this.ticketsUser = ticketsUserNotNull;
-            this.isLoaded = true; // Set isLoaded to true after successful retrieval of tickets
+            this.isLoaded = true;
           });
         } else {
           this.ticketsUser = [];
@@ -73,7 +75,6 @@ export class ListTicketComponent implements OnInit{
       (error) => {
           this.utilsService.showToastError('There is an error in retrieving the tickets' ,1000);
         console.error('getAllTickets Error: ', error);
-        // this.isLoaded = true; // Set isLoaded to true to stop the loader
       }
     );
   }
@@ -84,7 +85,7 @@ export class ListTicketComponent implements OnInit{
         id: ticket.id,
         completed: ticket.completed,
         description: ticket.description,
-        user: null // Set the user to null when there is no assigneeId
+        user: null 
       });
     }
   
@@ -98,7 +99,7 @@ export class ListTicketComponent implements OnInit{
       catchError((error) => {
         this.utilsService.showToastError('There is an error in retrieving the users in tickets' , 1000);
         console.error('getTicketUser Error: ', error);
-        return of(null); // Return an observable with null as a fallback value.
+        return of(null); 
       })
     );
   }
@@ -107,14 +108,14 @@ export class ListTicketComponent implements OnInit{
     this.backendService.users().pipe(
       catchError((error) => {
         console.error('Error getting all users:', error);
-        return of([]); // Return an empty array as a fallback value.
+        return of([]); 
       })
     ).subscribe((users) => {
       this.users = users;
     });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit() {
     const newTicketPayload = { description: this.descriptionToAdd };
     this.isAdding = true;
     this.backendService.newTicket(newTicketPayload).pipe(
@@ -122,10 +123,11 @@ export class ListTicketComponent implements OnInit{
         console.error('Error creating new ticket:', error);
         this.utilsService.showToastError('An error occured while adding the ticket, Please try again' , 1000);
         this.isAdding = false;
-        return of(null); // Return an observable with null as a fallback value.
+        return of(null);
       })
     ).subscribe((ticket) => {
       if (ticket) {
+        this.ticketsTest.push(ticket);
         this.getAllTickets();
         this.utilsService.showToastSuccess('New ticket ' + ticket.description + ' created');
       }
@@ -142,7 +144,6 @@ export class ListTicketComponent implements OnInit{
     if (this.selectedUser) {
       this.ticketTable.filter(this.selectedUser.name, 'user.name', 'contains');
     } else {
-      // If no userSelected, remove the filter
       this.ticketTable.filter('', 'user.name', 'contains');
     }
   }
@@ -151,7 +152,6 @@ export class ListTicketComponent implements OnInit{
     if (this.selectedStatut) {
       this.ticketTable.filter(this.selectedStatut.status, 'completed', 'contains');
     } else {
-      // If no userSelected, remove the filter
       this.ticketTable.filter('', 'completed', 'contains');
     }
   }

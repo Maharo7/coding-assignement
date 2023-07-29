@@ -1,21 +1,47 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { ListTicketComponent } from './list-ticket.component';
+import { async, of} from 'rxjs';
+import { BackendService } from '../backend.service';
+import { FormsModule } from '@angular/forms'; 
 
 describe('ListTicketComponent', () => {
   let component: ListTicketComponent;
   let fixture: ComponentFixture<ListTicketComponent>;
+  let backendService: BackendService;
+
+  beforeEach(waitForAsync (() => {
+    TestBed.configureTestingModule({
+      declarations: [ListTicketComponent],
+      imports: [FormsModule],
+      providers: [BackendService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [ListTicketComponent]
-    });
     fixture = TestBed.createComponent(ListTicketComponent);
     component = fixture.componentInstance;
+    backendService = TestBed.inject(BackendService); 
+
     fixture.detectChanges();
   });
+  
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should add a ticket', () => {
+    const ticketDescription = 'new ticket description';
+    component.descriptionToAdd = ticketDescription;
+    const newTicketSpy = spyOn(backendService, 'newTicket').and.returnValue(of({ id: 1, description: ticketDescription, assigneeId : null, completed: false }));
+    component.onSubmit();
+    expect(component.ticketsTest.length).toBe(1);
+    expect(component.ticketsTest[0].description).toBe(ticketDescription);
+    expect(newTicketSpy).toHaveBeenCalledWith({ description: ticketDescription });
   });
+
+  it('Should get all user', () => {
+    const mockUsers = [{ id: 1, name: 'Victor' }];
+    spyOn(backendService, 'users').and.returnValue(of(mockUsers));
+    component.ngOnInit();
+    expect(component.users.length).toBeGreaterThanOrEqual(1);
+    expect(component.users[0].name).toEqual('Victor');
+  });
+
 });

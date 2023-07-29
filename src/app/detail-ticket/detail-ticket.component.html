@@ -3,7 +3,7 @@
         <p-progressSpinner class="p-progress-spinner-circle" styleClass="w-4rem h-4rem" strokeWidth="2" fill="var(--surface-ground)" animationDuration="1.5s"></p-progressSpinner>
     </div>
     <div *ngIf="isLoaded">
-        <p-card header="Task description" subheader="{{ticket.description}}" class="detail-ticket-field">
+        <p-card header="Task description" subheader="{{ticket?.description}}" class="detail-ticket-field">
             <ng-template pTemplate="header">
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
             </ng-template>
@@ -13,12 +13,12 @@
                      filterBy="name" [showClear]="true" placeholder="Select an user to assign">
                         <ng-template pTemplate="selectedUser">
                             <div class="flex align-items-center gap-2" *ngIf="selectedUser">
-                                <div>{{ selectedUser.name }}</div>
+                                <div>{{ selectedUser?.name }}</div>
                             </div>
                         </ng-template>
                         <ng-template let-userlist pTemplate="item">
                             <div class="flex align-items-center gap-2">
-                                <div>{{ userlist.name }}</div>
+                                <div>{{ userlist?.name }}</div>
                             </div>
                         </ng-template>
                     </p-dropdown>
@@ -28,7 +28,7 @@
             
             <p>
                 Status :
-                <p-tag [value]="ticket.completed ? 'Completed' : 'To do'" [severity]="getSeverity(ticket.completed)"></p-tag>
+                <p-tag [value]="ticket?.completed ? 'Completed' : 'To do'" [severity]="getSeverity(ticket?.completed)"></p-tag>
             </p>
             <ng-template pTemplate="footer">
                 <p-button label="Complete" icon="pi pi-check" [disabled]="ticket.completed || user == null" styleClass="p-button-success" (onClick)="completeTicket()" [loading]="isCompleteLoaded"></p-button>

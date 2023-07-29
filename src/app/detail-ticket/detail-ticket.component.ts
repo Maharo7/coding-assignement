@@ -5,7 +5,7 @@ import { User } from 'src/interfaces/user.interface';
 import { BackendService } from '../backend.service';
 import { UtilsService } from '../utils.service';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-detail-ticket',
@@ -20,36 +20,46 @@ export class DetailTicketComponent implements OnInit {
   selectedUser : User;
   isAssignLoaded: boolean;
   isCompleteLoaded : boolean;
+  id : number;
 
   constructor(private route : ActivatedRoute, private backendService :BackendService , private utilsService :UtilsService){
   }
 
   ngOnInit() {
-    const id = this.route.snapshot.params["id"];
-    this.getTicketsById(id);
+    this.id = this.route.snapshot.params['id'];
+    this.getTicketsById(this.id);
     this.getAllUsers();
   }
 
-  getTicketsById(id : number) {
+  getTicketsById(id: number) {
     this.isLoaded = false;
-    this.backendService.ticket(id).subscribe(
-      (ticket) => {
-        if(ticket){
-          this.ticket = ticket;
-          if(ticket.assigneeId) {
-            this.backendService.user(ticket.assigneeId).subscribe(
-              (user) => {
-                if(user) {
-                  this.user = user;
-                }
-                this.isLoaded = true;
-              }
-            )
-          }  
-          else { this.isLoaded = true; } 
+    this.backendService.ticket(id).pipe(
+      catchError((error) => {
+        console.error('Error retrieving ticket:', error);
+        this.utilsService.showToastError('An error occurred while retrieving the ticket.', 1000);
+        return of(null);
+      })
+    ).subscribe((ticket) => {
+      if (ticket) {
+        this.ticket = ticket;
+        if (ticket.assigneeId) {
+          this.backendService.user(ticket.assigneeId).pipe(
+            catchError((error) => {
+              console.error('Error retrieving user:', error);
+              this.utilsService.showToastError('An error occurred while retrieving the user.', 1000);
+              return of(null);
+            })
+          ).subscribe((user) => {
+            if (user) {
+              this.user = user;
+            }
+            this.isLoaded = true;
+          });
+        } else {
+          this.isLoaded = true;
         }
       }
-    )
+    });
   }
 
   getSeverity(status : boolean) {
@@ -57,10 +67,13 @@ export class DetailTicketComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.backendService.users().subscribe((users) => {
-      if (users) {
-        this.usersToSelect = users;
-      }
+    this.backendService.users().pipe(
+      catchError((error) => {
+        console.error('Error getting all users:', error);
+        return of([]); 
+      })
+    ).subscribe((users) => {
+      this.usersToSelect = users;
     });
   }
 
@@ -68,15 +81,14 @@ export class DetailTicketComponent implements OnInit {
     this.isAssignLoaded = true;
     this.backendService.assign(this.ticket.id, this.selectedUser.id).pipe(
       catchError((error) => {
-        this.utilsService.showToastError('Failed to assign the ticket' , 0);
+        this.utilsService.showToastError('Failed to assign the ticket' , 2000);
         console.error('Error assigning ticket:', error);
-        this.isAssignLoaded = false;
+        // this.isAssignLoaded = false;
         return of(null);
       })
     ).subscribe((ticket) => {
       if (ticket) {
         this.user = this.selectedUser;
-        // this.utilsService.showToastSuccessWithDelay('Ticket : '+ticket.description+ ' assigned to '+this.selectedUser.name ,2000 );
       }
       this.isAssignLoaded = false;
     });
@@ -87,15 +99,14 @@ export class DetailTicketComponent implements OnInit {
     this.backendService.complete(this.ticket.id,true).pipe(
       catchError((error) => {
         console.error('Error completing ticket:', error);
-        this.utilsService.showToastError('Failed to complete the ticket' , 0);
-        this.isCompleteLoaded = false;
+        this.utilsService.showToastError('Failed to complete the ticket' , 2000);
+        // this.isCompleteLoaded = false;
         return of(null);
       })
     )
     .subscribe((ticket) => {
       if(ticket){
         this.ticket=ticket;
-        // this.utilsService.showToastSuccessWithDelay('Ticket : '+ticket.description+ ' completed' ,2000 );
       }
       this.isCompleteLoaded = false;
     })
