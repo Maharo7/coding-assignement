@@ -1,7 +1,6 @@
 import { Component , OnInit , ViewChild } from '@angular/core';
 import { Ticket } from '../../interfaces/ticket.interface'
 import { Table } from 'primeng/table';
-import { NgForm } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { User } from 'src/interfaces/user.interface';
 import { UtilsService } from '../utils.service';
@@ -9,6 +8,7 @@ import { TicketUser } from 'src/interfaces/ticket-User.interface';
 import { Observable, forkJoin, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { BackendService } from '../backend.service';
+import { AddTicketComponent } from '../add-ticket/add-ticket.component';
 
 @Component({
   selector: 'app-list-ticket',
@@ -18,18 +18,16 @@ import { BackendService } from '../backend.service';
 })
 export class ListTicketComponent implements OnInit{
   
-  tickets: Ticket[];
-  ticketsTest: Ticket[] = [];
+  tickets: Ticket[] = [];
   ticketsUser: TicketUser[];
   users: User[] = [];
   selectedUser: User;
   searchValue: string | undefined;
   isLoaded: boolean;
-  descriptionToAdd: string;
-  isAdding: boolean;
 
   statut: { status: string }[] | undefined;
   selectedStatut: { status: string } | undefined;
+  @ViewChild(AddTicketComponent) addTicketComponent: AddTicketComponent;
 
   constructor(private backendService :BackendService, private utilsService: UtilsService){
   }
@@ -41,8 +39,32 @@ export class ListTicketComponent implements OnInit{
     ];
     this.getAllUsers();
     this.getAllTickets();
-    
+    // this.subscribeToTicketAdded();
   }
+
+  ngAfterViewInit() {
+    this.subscribeToTicketAdded();
+  }
+
+  private subscribeToTicketAdded() {
+    this.addTicketComponent.ticketAdded.subscribe(newTicket => {
+      if (newTicket) {
+        this.getAllTickets();
+      }
+    });
+  }
+
+  // ngAfterViewInit() {
+  //   // Subscribe to the ticketAdded event from AddTicketComponent
+  //   this.addTicketComponent.ticketAdded.subscribe(newTicket => {
+  //     console.log('TEST');
+      
+  //     if (newTicket) {
+  //       this.tickets.push(newTicket);
+  //       this.getAllTickets();
+  //     }
+  //   });
+  // }
 
   getAllTickets() {
     this.isLoaded = false;
@@ -107,31 +129,14 @@ export class ListTicketComponent implements OnInit{
   getAllUsers() {
     this.backendService.users().pipe(
       catchError((error) => {
+        this.utilsService.showToastError('There is an error in retrieving the users' , 1000);
         console.error('Error getting all users:', error);
         return of([]); 
       })
     ).subscribe((users) => {
-      this.users = users;
-    });
-  }
-
-  onSubmit() {
-    const newTicketPayload = { description: this.descriptionToAdd };
-    this.isAdding = true;
-    this.backendService.newTicket(newTicketPayload).pipe(
-      catchError((error) => {
-        console.error('Error creating new ticket:', error);
-        this.utilsService.showToastError('An error occured while adding the ticket, Please try again' , 1000);
-        this.isAdding = false;
-        return of(null);
-      })
-    ).subscribe((ticket) => {
-      if (ticket) {
-        this.ticketsTest.push(ticket);
-        this.getAllTickets();
-        this.utilsService.showToastSuccess('New ticket ' + ticket.description + ' created');
+      if(users){
+        this.users = users;
       }
-      this.isAdding = false;
     });
   }
 

@@ -1,0 +1,25 @@
+<p-toast></p-toast>
+<div class="ticket-add-field">
+    <p-fieldset legend="Add tickets" [toggleable]="true">
+        <form class="fieldset-ticket" (ngSubmit)="onSubmit()" #form="ngForm">
+            <div class="flex flex-column gap-2 add-ticket">
+                <label htmlFor="description">Ticket description</label>
+                <!-- <input pInputText name="description" [(ngModel)]="descriptionToAdd" #description="ngModel" required minlength="4" class="add-ticket-input"/> -->
+                <div class="card flex textarea-description">
+                    <textarea rows="1.5" name="description" cols="40" pInputTextarea [(ngModel)]="descriptionToAdd" #description="ngModel" required minlength="4"></textarea>
+                </div>
+                <div *ngIf="description.invalid && (description.dirty || description.touched)">
+                    <div class = "error-message-input" *ngIf="description.errors?.['required']">
+                        Description required
+                    </div>
+                    <div class = "error-message-input" *ngIf="description.errors?.['minlength']">
+                        Description must have at least 4 characters
+                    </div>
+                </div>
+            </div>
+            <div class="button-add-ticket">
+                <p-button class="add-button-ticket" [disabled]="!form.valid" label="Add ticket" type="submit"  [loading]="isAdding"></p-button>
+            </div>
+        </form>
+    </p-fieldset>
+</div>

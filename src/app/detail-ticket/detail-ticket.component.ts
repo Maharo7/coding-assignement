@@ -69,11 +69,14 @@ export class DetailTicketComponent implements OnInit {
   getAllUsers() {
     this.backendService.users().pipe(
       catchError((error) => {
+        this.utilsService.showToastError('There is an error in retrieving the users' , 1000);
         console.error('Error getting all users:', error);
         return of([]); 
       })
     ).subscribe((users) => {
-      this.usersToSelect = users;
+      if(users) {
+        this.usersToSelect = users;
+      }
     });
   }
 

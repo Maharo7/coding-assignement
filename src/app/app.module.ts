@@ -22,9 +22,10 @@ import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng-lts/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AddTicketComponent } from './add-ticket/add-ticket.component';
 
 @NgModule({
-    declarations: [AppComponent, HeaderComponent, ListTicketComponent, DetailTicketComponent, PageNotFoundComponent],
+    declarations: [AppComponent, HeaderComponent, ListTicketComponent, DetailTicketComponent, PageNotFoundComponent, AddTicketComponent],
     imports: [BrowserModule, ButtonModule, TabMenuModule, FieldsetModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, CardModule, TableModule,
         ProgressSpinnerModule, InputTextModule, ToastModule, DropdownModule, TagModule, InputTextareaModule],
     providers: [BackendService, UtilsService ,MessageService],

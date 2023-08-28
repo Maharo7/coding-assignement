@@ -26,16 +26,6 @@ describe('ListTicketComponent', () => {
   });
   
 
-  it('should add a ticket', () => {
-    const ticketDescription = 'new ticket description';
-    component.descriptionToAdd = ticketDescription;
-    const newTicketSpy = spyOn(backendService, 'newTicket').and.returnValue(of({ id: 1, description: ticketDescription, assigneeId : null, completed: false }));
-    component.onSubmit();
-    expect(component.ticketsTest.length).toBe(1);
-    expect(component.ticketsTest[0].description).toBe(ticketDescription);
-    expect(newTicketSpy).toHaveBeenCalledWith({ description: ticketDescription });
-  });
-
   it('Should get all user', () => {
     const mockUsers = [{ id: 1, name: 'Victor' }];
     spyOn(backendService, 'users').and.returnValue(of(mockUsers));
